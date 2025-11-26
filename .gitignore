@@ -1,0 +1,19 @@
+# Copyright (c) 2025 Zabbix-MCP
+# Licensed under the Apache License, Version 2.0
+
+.env
+*.env
+!.env.example
+__pycache__/
+.venv/
+.idea/
+.vscode/
+*.pyc
+logs/
+*.log
+dist/
+build/
+.pytest_cache/
+*.coverage
+coverage.xml
+

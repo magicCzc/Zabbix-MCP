@@ -1,0 +1,2 @@
+[console_scripts]
+zabbix-mcp = zabbix_mcp.cli:app

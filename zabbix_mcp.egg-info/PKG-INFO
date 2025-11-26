@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: zabbix-mcp
+Version: 0.1.0
+Summary: MCP tool integrating Zabbix API for conversational alert queries and log association
+Author: Zabbix-MCP Authors
+License: Apache-2.0
+Requires-Python: >=3.8
+Requires-Dist: fastapi>=0.115.0
+Requires-Dist: uvicorn>=0.31.0
+Requires-Dist: httpx>=0.27.0
+Requires-Dist: pydantic>=2.9.0
+Requires-Dist: typer>=0.12.5
+Requires-Dist: rich>=13.9.0
+Requires-Dist: prometheus-client>=0.20.0
+Requires-Dist: python-dotenv>=1.0.1
