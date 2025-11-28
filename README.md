@@ -16,9 +16,6 @@ limitations under the License.
 
 # Zabbix-MCP（Zabbix只读查询中台）
 
-- Author: Chenzc
-- Release Date: 2025-11-16
-- Contact: 910445306@qq.com
 
 ## 概述
 Zabbix-MCP 是一个面向 Zabbix 的只读查询中台，提供 REST/CLI 的统一查询、筛选、日志关联能力，并具备 RBAC、审计日志、资源限制、Prometheus 指标、配置热更新等运维友好特性。项目严格遵循只读原则，不包含任何可能修改系统状态的功能。
