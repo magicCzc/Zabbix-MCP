@@ -16,7 +16,7 @@ limitations under the License.
 
 import asyncio
 import time
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict
 
 from .schemas import AlertQuery, LogAssociationQuery, AlertItem, AlertResponse
 from .zabbix_client import ZabbixClient
@@ -67,7 +67,7 @@ async def query_alerts(client: ZabbixClient, query: AlertQuery) -> AlertResponse
         items.sort(key=lambda x: x.timestamp, reverse=True)
     elif query.sort_by == "frequency":
         # Frequency by alert name
-        freq: dict[str, int] = {}
+        freq: Dict[str, int] = {}
         for it in items:
             freq[it.name] = freq.get(it.name, 0) + 1
         items.sort(key=lambda x: freq.get(x.name, 0), reverse=True)

@@ -38,8 +38,13 @@ python --version 2>&1 | Tee-Object -FilePath $LogFile -Append
 
 Log "Installing dependencies (pip upgrade)"
 python -m pip install -U pip 2>&1 | Tee-Object -FilePath $LogFile -Append
-Log "Installing project in editable mode"
-python -m pip install -e . 2>&1 | Tee-Object -FilePath $LogFile -Append
+if (Test-Path "requirements.txt") {
+  Log "Installing dependencies from requirements.txt"
+  python -m pip install -r requirements.txt 2>&1 | Tee-Object -FilePath $LogFile -Append
+} else {
+  Log "requirements.txt not found; installing project editable"
+  python -m pip install -e . 2>&1 | Tee-Object -FilePath $LogFile -Append
+}
 
 Log "Starting server on $Host:$Port"
 uvicorn zabbix_mcp.api:app --host $Host --port $Port 2>&1 | Tee-Object -FilePath $LogFile

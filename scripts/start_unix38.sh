@@ -33,8 +33,13 @@ python --version 2>&1 | tee -a "$LOG_FILE"
 
 echo "Installing dependencies (pip upgrade)" | tee -a "$LOG_FILE"
 python -m pip install -U pip 2>&1 | tee -a "$LOG_FILE"
-echo "Installing project in editable mode" | tee -a "$LOG_FILE"
-python -m pip install -e . 2>&1 | tee -a "$LOG_FILE"
+if [ -f requirements.txt ]; then
+  echo "Installing dependencies from requirements.txt" | tee -a "$LOG_FILE"
+  python -m pip install -r requirements.txt 2>&1 | tee -a "$LOG_FILE"
+else
+  echo "requirements.txt not found; installing project editable" | tee -a "$LOG_FILE"
+  python -m pip install -e . 2>&1 | tee -a "$LOG_FILE"
+fi
 
 echo "Starting server on $HOST:$PORT" | tee -a "$LOG_FILE"
 uvicorn zabbix_mcp.api:app --host "$HOST" --port "$PORT" 2>&1 | tee -a "$LOG_FILE"

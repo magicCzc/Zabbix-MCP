@@ -19,7 +19,7 @@ from fastapi import FastAPI, HTTPException, Depends, WebSocket, Request
 from fastapi.responses import JSONResponse, Response
 
 from .config import load_settings
-from .schemas import AlertQuery, LogAssociationQuery, AlertResponse, ErrorResponse, NLQuery
+from .schemas import AlertQuery, LogAssociationQuery, AlertItem, AlertResponse, ErrorResponse, NLQuery, TimeRange
 from .zabbix_client import ZabbixClient, ZabbixAPIError, MockZabbixClient
 from .services import query_alerts, today_alerts, associate_logs
 from .nlp import parse_alert_query
@@ -114,15 +114,36 @@ async def audit_middleware(request: Request, call_next):
 
 
 @app.post("/alerts/query", response_model=AlertResponse)
-async def api_alerts_query(payload: AlertQuery, role: str = Depends(require_role("read"))):
+async def api_alerts_query(payload: AlertQuery, request: Request, role: str = Depends(require_role("read"))):
     cli = await get_client()
     try:
         with REQUEST_LATENCY.labels("alerts_query").time():
             REQUEST_COUNT.labels("alerts_query").inc()
             s = settings_cache or load_settings()
             eff_limit = min(max(1, payload.limit), s.max_results_limit)
+            tr = payload.time_range
+            try:
+                data = await request.json()
+                if not tr and isinstance(data, dict):
+                    ft = data.get("from_ts")
+                    tt = data.get("to_ts")
+                    if ft is not None and tt is not None:
+                        try:
+                            ft = int(ft)
+                            tt = int(tt)
+                            if ft > 10**12:
+                                ft //= 1000
+                            if tt > 10**12:
+                                tt //= 1000
+                            if ft > tt:
+                                ft, tt = tt, ft
+                            tr = TimeRange(start_ts=ft, end_ts=tt)
+                        except Exception:
+                            pass
+            except Exception:
+                pass
             payload = AlertQuery(
-                time_range=payload.time_range,
+                time_range=tr,
                 host_groups=payload.host_groups,
                 hosts=payload.hosts,
                 severities=payload.severities,

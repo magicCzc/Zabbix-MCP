@@ -15,11 +15,12 @@ limitations under the License.
 """
 
 import os
+from typing import Optional
 from fastapi import Header, HTTPException
 
 
 def require_role(required: str):
-    async def checker(authorization: str | None = Header(default=None)):
+    async def checker(authorization: Optional[str] = Header(default=None)):
         token = authorization.split(" ")[-1] if authorization else None
         admin = os.getenv("MCP_AUTH_TOKEN_ADMIN")
         read = os.getenv("MCP_AUTH_TOKEN_READ")
@@ -34,4 +35,3 @@ def require_role(required: str):
             raise HTTPException(status_code=403, detail={"i18n_key": "error.forbidden", "message": "read required"})
         return role
     return checker
-

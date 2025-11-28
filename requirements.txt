@@ -1,0 +1,12 @@
+# Copyright (c) 2025 Zabbix-MCP
+# Licensed under the Apache License, Version 2.0
+
+fastapi>=0.115.0
+uvicorn>=0.31.0
+httpx>=0.27.0
+pydantic>=2.9.0
+typer>=0.12.5
+rich>=13.9.0
+prometheus-client>=0.20.0
+python-dotenv>=1.0.1
+

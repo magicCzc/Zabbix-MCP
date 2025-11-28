@@ -32,7 +32,7 @@ limitations under the License.
 ## 安装依赖
 ```bash
 python -m pip install -U pip
-python -m pip install -e .
+python -m pip install -r requirements.txt
 ```
 
 ## 启动与停止
@@ -61,14 +61,14 @@ ENV_FILE=.env PORT=5656 HOST=0.0.0.0 bash scripts/start_unix38.sh
     ```powershell
     py -3.8 -m venv .venv
     .venv\Scripts\Activate.ps1
-    python -m pip install -e .
+    python -m pip install -r requirements.txt
     uvicorn zabbix_mcp.api:app --host 0.0.0.0 --port 8000
     ```
   - Linux/macOS：
     ```bash
     python3.8 -m venv .venv
     source .venv/bin/activate
-    python -m pip install -e .
+    python -m pip install -r requirements.txt
     uvicorn zabbix_mcp.api:app --host 0.0.0.0 --port 8000
     ```
   - 若无法改动宿主环境，建议使用容器运行（示例）：
@@ -92,6 +92,7 @@ ENV_FILE=.env BASE_URL=http://127.0.0.1:5656 bash scripts/smoke_test.sh
 
 ### 测试环境
 - 通过 CI/CD 注入环境变量（不提交 `.env` 到仓库）
+- 使用 `pip install -r requirements.txt` 安装依赖
 - 开启 `VERIFY_SSL=1`；RBAC 令牌由秘密管理系统下发
 - 采集 `GET /metrics` 指标，设置 p95 延迟与失败率阈值告警
 
